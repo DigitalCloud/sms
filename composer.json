@@ -1,0 +1,44 @@
+{
+  "name": "digitalcloud/sms",
+  "description": "a sms notifier package for laravel that supports multiple providers",
+  "keywords": [
+    "laravel",
+    "package",
+    "sms"
+  ],
+  "license": "MIT",
+  "require": {
+    "php": "^7.1.3",
+    "twilio/sdk": "^5.20"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^3.5",
+    "phpunit/phpunit": "^8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Digitalcloud\\SMS\\": "src/"
+    },
+    "classmap": [
+    ]
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Digitalcloud\\SMS\\Providers\\ServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Digitalcloud\\SMS\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
