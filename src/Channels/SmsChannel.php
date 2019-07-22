@@ -3,26 +3,13 @@
 namespace Digitalcloud\SMS\Channels;
 
 use Digitalcloud\SMS\Interfaces\SMSNotifier;
-use Digitalcloud\SMS\Providers\Twilio;
 use Digitalcloud\SMS\Models\SmsLog;
 use Illuminate\Notifications\Notification;
 
 class SmsChannel
 {
-    /**
-     * Send the given notification.
-     *
-     * @param mixed $notifiable
-     * @param \Illuminate\Notifications\Notification $notification
-     *
-     * @return void
-     */
     public function send($notifiable, Notification $notification)
     {
-        if (!$notifiable->country || $notifiable->country->provider != Country::PROVIDER_UNIFONIC) {
-            app()->bind(SMSNotifier::class, Twilio::class);
-        }
-
         $this->notify($notifiable, $notification, $this->getData($notifiable, $notification));
     }
 
@@ -43,10 +30,6 @@ class SmsChannel
 
     private function notify($notifiable, $notification, $data)
     {
-        if (env("APP_ENV") == "testing" || !AdminSetting::isEnabled('sms_notifications')) {
-            return;
-        }
-
         $sms = resolve(SMSNotifier::class);
 
         try {
