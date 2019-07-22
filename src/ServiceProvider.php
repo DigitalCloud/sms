@@ -2,8 +2,8 @@
 
 namespace Digitalcloud\SMS;
 
-use Digitalcloud\SMS\Interfaces\SMSNotifier;
 use Digitalcloud\SMS\Providers\Twilio;
+use Digitalcloud\SMS\Providers\Unifonic;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -15,6 +15,23 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__ . './../database/migrations');
 
-        $this->app->bind(SMSNotifier::class, Twilio::class);
+        if ($default = config("sms.default")) {
+            $this->app->bind(Provider::class, self::getProviderFromDriver($default));
+        }
+    }
+
+    public static function getProviderFromDriver($driver)
+    {
+        switch ($driver) {
+            case "unifonic":
+                return Unifonic::class;
+                break;
+            case "twilio":
+                return Twilio::class;
+                break;
+            default:
+                throw new ProviderException("Provider doesnt exists", 500);
+                break;
+        }
     }
 }

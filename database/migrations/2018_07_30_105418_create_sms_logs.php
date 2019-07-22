@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFailedSms extends Migration
+class CreateSmsLogs extends Migration
 {
     /**
      * Run the migrations.
@@ -16,12 +16,13 @@ class CreateFailedSms extends Migration
         Schema::create('sms_logs', function (Blueprint $table) {
             $table->increments('id');
             $table->morphs('notifiable');
-            $table->string('notification');
             $table->string('mobile');
             $table->string('provider');
             $table->string('message')->nullable();
-            $table->string('status')->nullable();
-            $table->string('payload')->nullable();
+            $table->string('response')->nullable();
+            $table->boolean('success')->nullable();
+            $table->string('response_code')->nullable();
+            $table->string('notification')->nullable();
             $table->timestamps();
         });
     }

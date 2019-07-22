@@ -2,27 +2,53 @@
 
 namespace Digitalcloud\SMS\Providers;
 
+use Digitalcloud\SMS\Classes\ProviderResponse;
 use Digitalcloud\SMS\Interfaces\SMSNotifier;
 use Illuminate\Support\Str;
 
 class Unifonic implements SMSNotifier
 {
-    protected static $sender;
-    protected static $userAccount;
-    protected static $passAccount;
-    protected static $appId;
-    const UN_SUPPORTED_STATUS_CODE = 21211;//eq to ER-11
-    const UN_SUPPORTED_STATUS_CODE_STRING = 'ER-11';//eq to ER-11
-
-    public function notify($mobileNo, $message)
+    public function notify($mobileNo, $message): ProviderResponse
     {
         if (Str::startsWith($mobileNo, '+')) {
             $mobileNo = substr($mobileNo, 1);
         }
 
-        self::send($mobileNo, $message);
+        $resp = self::send($mobileNo, $message);
 
-        return true;
+        if (strtolower($resp->success) === "true") {
+            return ProviderResponse::make()
+                ->setMobile($mobileNo)
+                ->setProvider(self::class)
+                ->setMessage($message)
+                ->setSuccess(true);
+        } else {
+            return ProviderResponse::make()
+                ->setMobile($mobileNo)
+                ->setProvider(self::class)
+                ->setMessage($message)
+                ->setSuccess(false)
+                ->setResponse($resp->message)
+                ->setCode($resp->errorCode);
+        }
+    }
+
+    private static function send($numbers, $msg)
+    {
+        $numbers = self::format_numbers($numbers);
+        $appId = config('sms.drivers.unifonic.app_id');
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, 'http://api.unifonic.com/rest/Messages/Send');
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, "AppSid={$appId}&Recipient={$numbers}&Body={$msg}");
+        curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        return json_decode($response);
     }
 
     private static function format_numbers($numbers)
@@ -30,7 +56,9 @@ class Unifonic implements SMSNotifier
         if (!is_array($numbers)) {
             return self::format_number($numbers);
         }
+
         $numbers_array = [];
+
         foreach ($numbers as $number) {
             $n = self::format_numbers($number);
             array_push($numbers_array, $n);
@@ -50,44 +78,5 @@ class Unifonic implements SMSNotifier
         }
 
         return $number;
-    }
-
-    private static function Send($numbers, $msg)
-    {
-        static::run();
-        $numbers = self::format_numbers($numbers);
-        $id = self::$appId;
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'http://api.unifonic.com/rest/Messages/Send');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "AppSid={$id}&Recipient={$numbers}&Body={$msg}");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        $response = json_decode($response);
-
-        if (isset($response->success) && strtolower($response->success) == 'true') {
-            return true;
-        }
-
-        $statusCode = 0;
-
-        if ($response->errorCode === self::UN_SUPPORTED_STATUS_CODE_STRING) {
-            $statusCode = self::UN_SUPPORTED_STATUS_CODE;
-        }
-
-        throw new \Exception($response->message ?? '', $statusCode);
-    }
-
-    private static function run()
-    {
-        static::$sender = config('sms.unifonic.sender');
-        static::$userAccount = config('sms.unifonic.username');
-        static::$passAccount = config('sms.unifonic.password');
-        static::$appId = config('sms.unifonic.app_id');
     }
 }
