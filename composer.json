@@ -25,7 +25,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Digitalcloud\\SMS\\Providers\\ServiceProvider"
+        "Digitalcloud\\SMS\\ServiceProvider"
       ]
     }
   },

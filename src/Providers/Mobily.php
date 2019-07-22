@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Classes\SMSProviders;
+namespace Digitalcloud\SMS\Providers;
 
-use App\Classes\SMSNotifier;
+use Digitalcloud\SMS\Interfaces\SMSNotifier;
 
 class Mobily implements SMSNotifier
 {

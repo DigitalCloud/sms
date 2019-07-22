@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Channels;
+namespace Digitalcloud\SMS\Channels;
 
-use App\Classes\SMSNotifier;
-use App\Classes\SMSProviders\Twilio;
-use App\Models\AdminSetting;
-use App\Models\Country;
-use App\Models\SmsLog;
+use Digitalcloud\SMS\Interfaces\SMSNotifier;
+use Digitalcloud\SMS\Providers\Twilio;
+use Digitalcloud\SMS\Models\SmsLog;
 use Illuminate\Notifications\Notification;
 
 class SmsChannel
