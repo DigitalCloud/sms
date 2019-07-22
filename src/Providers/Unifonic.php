@@ -3,6 +3,7 @@
 namespace Digitalcloud\SMS\Providers;
 
 use Digitalcloud\SMS\Interfaces\SMSNotifier;
+use Illuminate\Support\Str;
 
 class Unifonic implements SMSNotifier
 {
@@ -15,7 +16,7 @@ class Unifonic implements SMSNotifier
 
     public function notify($mobileNo, $message)
     {
-        if (starts_with($mobileNo, '+')) {
+        if (Str::startsWith($mobileNo, '+')) {
             $mobileNo = substr($mobileNo, 1);
         }
 
@@ -42,9 +43,9 @@ class Unifonic implements SMSNotifier
     {
         if (strlen($number) == 10 && starts_with($number, '05')) {
             return preg_replace('/^0/', '966', $number);
-        } elseif (starts_with($number, '00')) {
+        } elseif (Str::startsWith($number, '00')) {
             return preg_replace('/^00/', '', $number);
-        } elseif (starts_with($number, '+')) {
+        } elseif (Str::startsWith($number, '+')) {
             return preg_replace('/^+/', '', $number);
         }
 
@@ -84,9 +85,9 @@ class Unifonic implements SMSNotifier
 
     private static function run()
     {
-        static::$sender = config('uniform.sender');
-        static::$userAccount = config('uniform.username');
-        static::$passAccount = config('uniform.password');
-        static::$appId = config('uniform.app_id');
+        static::$sender = config('sms.unifonic.sender');
+        static::$userAccount = config('sms.unifonic.username');
+        static::$passAccount = config('sms.unifonic.password');
+        static::$appId = config('sms.unifonic.app_id');
     }
 }

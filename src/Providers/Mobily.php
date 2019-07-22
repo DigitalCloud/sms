@@ -3,6 +3,7 @@
 namespace Digitalcloud\SMS\Providers;
 
 use Digitalcloud\SMS\Interfaces\SMSNotifier;
+use Illuminate\Support\Str;
 
 class Mobily implements SMSNotifier
 {
@@ -18,7 +19,7 @@ class Mobily implements SMSNotifier
 
     public function notify($mobileNo, $message)
     {
-        if (starts_with($mobileNo, '+')) {
+        if (Str::startsWith($mobileNo, '+')) {
             $mobileNo = substr($mobileNo, 1);
         }
 
@@ -43,11 +44,11 @@ class Mobily implements SMSNotifier
 
     private static function format_number($number)
     {
-        if (strlen($number) == 10 && starts_with($number, '05')) {
+        if (strlen($number) == 10 && Str::startsWith($number, '05')) {
             return preg_replace('/^0/', '966', $number);
-        } elseif (starts_with($number, '00')) {
+        } elseif (Str::startsWith($number, '00')) {
             return preg_replace('/^00/', '', $number);
-        } elseif (starts_with($number, '+')) {
+        } elseif (Str::startsWith($number, '+')) {
             return preg_replace('/^+/', '', $number);
         }
 
@@ -61,7 +62,7 @@ class Mobily implements SMSNotifier
         $url = 'www.mobily.ws/api/msgSend.php';
         $applicationType = '68';
         $sender = urlencode(static::$sender);
-        $stringToPost = 'mobile='.static::$userAccount.'&password='.static::$passAccount.'&numbers='.$numbers.'&sender='.$sender.'&msg='.$msg.'&timeSend='.$timeSend.'&dateSend='.$dateSend.'&applicationType='.$applicationType.'&domainName='.$url.'&msgId='.static::$MsgID.'&deleteKey='.static::$deleteKey.'&lang=3';
+        $stringToPost = 'mobile=' . static::$userAccount . '&password=' . static::$passAccount . '&numbers=' . $numbers . '&sender=' . $sender . '&msg=' . $msg . '&timeSend=' . $timeSend . '&dateSend=' . $dateSend . '&applicationType=' . $applicationType . '&domainName=' . $url . '&msgId=' . static::$MsgID . '&deleteKey=' . static::$deleteKey . '&lang=3';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -104,12 +105,12 @@ class Mobily implements SMSNotifier
 
     private static function run()
     {
-        static::$sender = config('mobilysms.sender');
-        static::$deleteKey = config('mobilysms.deleteKey');
-        static::$resultType = config('mobilysms.resultType');
-        static::$viewResult = config('mobilysms.viewResult');
-        static::$MsgID = config('mobilysms.MsgID');
-        static::$userAccount = config('mobilysms.mobile');
-        static::$passAccount = config('mobilysms.password');
+        static::$sender = config('sms.mobily.sender');
+        static::$deleteKey = config('sms.mobily.deleteKey');
+        static::$resultType = config('sms.mobily.resultType');
+        static::$viewResult = config('sms.mobily.viewResult');
+        static::$MsgID = config('sms.mobily.MsgID');
+        static::$userAccount = config('sms.mobily.mobile');
+        static::$passAccount = config('sms.mobily.password');
     }
 }

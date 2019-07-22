@@ -2,6 +2,7 @@
 
 namespace Digitalcloud\SMS\Channels;
 
+use Digitalcloud\SMS\Exceptions\ProviderException;
 use Digitalcloud\SMS\Interfaces\SMSNotifier;
 use Digitalcloud\SMS\Models\SmsLog;
 use Illuminate\Notifications\Notification;
@@ -36,7 +37,7 @@ class SmsChannel
             $result = $sms->notify($data['mobile'], $data['message']);
 
             if ($result !== true) {
-                throw new \Exception();
+                throw new ProviderException();
             } else {
                 $notifiable->smsLogs()->create([
                     'notification' => get_class($notification),

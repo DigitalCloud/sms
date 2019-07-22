@@ -18,9 +18,9 @@ class Twilio implements SMSNotifier
 
     public function __construct()
     {
-        $this->sid = config('services.twilio.account_sid');
-        $this->token = config('services.twilio.auth_token');
-        $this->from = config('services.twilio.from_number');
+        $this->sid = config('sms.twilio.account_sid');
+        $this->token = config('sms.twilio.auth_token');
+        $this->from = config('sms.twilio.from_number');
         $this->tries = 0;
         $this->client = new Client($this->sid, $this->token);
     }
@@ -39,7 +39,7 @@ class Twilio implements SMSNotifier
         } catch (Exception $exception) {
 
             if ($exception->getCode() == 21612 && $this->tries == 1) {
-                $this->from = config('services.twilio.from_number');
+                $this->from = config('sms.twilio.from_number');
 
                 return $this->notify($mobileNo, $message);
             }
