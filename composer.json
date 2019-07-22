@@ -4,7 +4,9 @@
   "keywords": [
     "laravel",
     "package",
-    "sms"
+    "sms",
+    "unifonic",
+    "twilio"
   ],
   "license": "MIT",
   "require": {

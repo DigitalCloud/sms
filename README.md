@@ -1,4 +1,4 @@
-# Digitalcloud SMS Notifier module
+# Digitalcloud SMS Notifier module for laravel
 
 ## Features
 * Supports multiple SMS providers (twilio and unifonic).
