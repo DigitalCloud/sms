@@ -4,6 +4,7 @@ namespace Digitalcloud\SMS\Providers;
 
 use Digitalcloud\SMS\Interfaces\SMSNotifier;
 use Exception;
+use Illuminate\Support\Str;
 use Twilio\Rest\Client;
 
 class Twilio implements SMSNotifier
@@ -28,7 +29,7 @@ class Twilio implements SMSNotifier
     public function notify($mobileNo, $message)
     {
         try {
-            if (!starts_with($mobileNo, '+')) {
+            if (!Str::startsWith($mobileNo, '+')) {
                 $mobileNo = '+' . $mobileNo;
             }
 

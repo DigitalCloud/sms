@@ -41,7 +41,7 @@ class Unifonic implements SMSNotifier
 
     private static function format_number($number)
     {
-        if (strlen($number) == 10 && starts_with($number, '05')) {
+        if (strlen($number) == 10 && Str::startsWith($number, '05')) {
             return preg_replace('/^0/', '966', $number);
         } elseif (Str::startsWith($number, '00')) {
             return preg_replace('/^00/', '', $number);
