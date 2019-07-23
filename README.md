@@ -51,6 +51,9 @@ alternatively you can add `getMobile` method inside your notification class, so 
 * in your notification class include the SMS channel in via function,
 also `toSMS` function.
 
+* you can add `getShouldThrow` method into your notification class to
+ allow channel to throw an instance of `ProviderException` if the provider request has been failed.
+
 ```php
 <?php
 
@@ -70,6 +73,11 @@ class YourNotificationClass extends Notification {
     //optional
     public function getMobile(){
         return '0599865326';
+    }
+    
+    //optional
+    public function getShouldThrow(){
+        return true;
     }
 }
 ```
