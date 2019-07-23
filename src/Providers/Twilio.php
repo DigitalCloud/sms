@@ -2,13 +2,13 @@
 
 namespace Digitalcloud\SMS\Providers;
 
-use Digitalcloud\SMS\Classes\ProviderResponse;
-use Digitalcloud\SMS\Interfaces\SMSNotifier;
+use Digitalcloud\SMS\Provider;
+use Digitalcloud\SMS\ProviderResponse;
 use Illuminate\Support\Str;
 use Twilio\Exceptions\RestException;
 use Twilio\Rest\Client;
 
-class Twilio implements SMSNotifier
+class Twilio implements Provider
 {
     private $from;
     private $tries;

@@ -2,11 +2,11 @@
 
 namespace Digitalcloud\SMS\Providers;
 
-use Digitalcloud\SMS\Classes\ProviderResponse;
-use Digitalcloud\SMS\Interfaces\SMSNotifier;
+use Digitalcloud\SMS\ProviderResponse;
+use Digitalcloud\SMS\Provider;
 use Illuminate\Support\Str;
 
-class Unifonic implements SMSNotifier
+class Unifonic implements Provider
 {
     public function notify($mobileNo, $message): ProviderResponse
     {
