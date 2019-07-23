@@ -3,7 +3,7 @@
 ## Features
 * Supports multiple SMS providers (twilio and unifonic).
 * A channel for sending SMS notifications.
-* Log the response returned from provider for each request.
+* Logging.
 * A unified response for all providers.
 
 
