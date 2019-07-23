@@ -46,10 +46,11 @@ class User extends Model {
     }
 }
 ```
-alternatively you can add `getMobile` method inside your notification class, so the mobile number will taken from the notification and the other in the model will discarded.
+alternatively you can add `getMobile` method inside your notification class, so the mobile number will be taken from the `getMobile` not from `routeNotificationForSms`.
 
 * in your notification class include the SMS channel in via function,
 also `toSMS` function.
+
 ```php
 <?php
 
