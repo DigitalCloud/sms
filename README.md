@@ -35,8 +35,21 @@ finally, publish the config using this command:
 ## Usage
 * Each model that use sms notifications should use `Digitalcloud\SMS\HasSmsLogs` trait
 to allow logging.
+
+* add `routeNotificationForSms` in your notifiable model
+```php
+<?php
+
+class User extends Model {
+    public function routeNotificationForSms(){
+        return $this->mobile;
+    }
+}
+```
+alternatively you can add `getMobile` method inside your notification class, so the mobile number will taken from the notification and the other in the model will discarded.
+
 * in your notification class include the SMS channel in via function,
-also `getMobile` and `getMessage` functions.
+also `toSMS` function.
 ```php
 <?php
 
@@ -49,12 +62,13 @@ class YourNotificationClass extends Notification {
         return [SMSChannel::class];
     }
     
-    public function getMobile(){
-        return '970567940999';
+    public function toSms(){
+        return 'Your activation code is 6523';
     }
     
-    public function getMessage(){
-        return 'Your activation code is 6523';
+    //optional
+    public function getMobile(){
+        return '0599865326';
     }
 }
 ```
