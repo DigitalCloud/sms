@@ -16,9 +16,7 @@
   "autoload": {
     "psr-4": {
       "Digitalcloud\\SMS\\": "src/"
-    },
-    "classmap": [
-    ]
+    }
   },
   "extra": {
     "laravel": {
@@ -29,12 +27,6 @@
   },
   "config": {
     "sort-packages": true
-  },
-  "autoload-dev": {
-    "psr-4": {
-    }
-  },
-  "scripts": {
   },
   "minimum-stability": "dev",
   "prefer-stable": true
