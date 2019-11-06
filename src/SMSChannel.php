@@ -29,6 +29,9 @@ class SMSChannel
 
     private function notify($notifiable, $notification)
     {
+        if (!config('sms.default'))
+            return;
+        
         $data = $this->getData($notifiable, $notification);
 
         $message = is_array($data) ? Arr::first($data) : $data;
